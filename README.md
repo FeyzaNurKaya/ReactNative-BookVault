@@ -1,6 +1,6 @@
-# AwesomeProject
+# ReactNative-BookVault
 
-A React Native mobile application built with modern technologies and best practices.
+A React Native mobile application for managing and exploring your digital book collection with modern technologies and best practices.
 
 ## 🚀 Technologies Used
 
@@ -22,8 +22,8 @@ A React Native mobile application built with modern technologies and best practi
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/FeyzaNurKaya/AwesomeProject.git
-cd AwesomeProject
+git clone https://github.com/FeyzaNurKaya/ReactNative-BookVault.git
+cd ReactNative-BookVault
 ```
 
 2. Install dependencies:
@@ -39,9 +39,12 @@ npx expo start
 ## 📂 Project Structure
 
 ```
-AwesomeProject/
+ReactNative-BookVault/
 ├── App.tsx              # Main application component
 ├── screens/             # Screen components
+│   ├── LoginScreen     # User authentication
+│   ├── HomeScreen      # Book listing and navigation
+│   └── BookDetail      # Detailed book information
 ├── components/          # Reusable components
 ├── assets/             # Static assets
 └── ...
@@ -61,7 +64,7 @@ npx expo run:android
 
 ## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/FeyzaNurKaya/AwesomeProject/issues).
+Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/FeyzaNurKaya/ReactNative-BookVault/issues).
 
 ## 📝 License
 

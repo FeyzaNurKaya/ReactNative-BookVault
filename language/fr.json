@@ -1,0 +1,30 @@
+{
+  "login": "Connexion",
+  "username": "Nom d'utilisateur",
+  "password": "Mot de passe",
+  "products": "Produits",
+  "search": "Rechercher un produit..",
+  "logout": "Se déconnecter",
+  "home": "Accueil",
+  "languages": {
+    "tr": "Turc",
+    "en": "Anglais",
+    "fr": "Français",
+    "de": "Allemand"
+  },
+  "bookDetail": {
+    "title": "Détails du livre",
+    "loading": "Chargement des détails du livre...",
+    "notFound": "Livre non trouvé",
+    "goBack": "Retour",
+    "try": "TRY",
+    "kdvIncluded": "TVA Incluse",
+    "point": "Point",
+    "listPrice": "Prix de Liste",
+    "discount": "Remise",
+    "stock": "Stock",
+    "invalidBarcode": "Code-barres invalide",
+    "origin": "Origine",
+    "priceUpdateDate": "Date de Mise à Jour du Prix"
+  }
+} 

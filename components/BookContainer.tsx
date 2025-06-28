@@ -1,151 +1,170 @@
-import { StyleSheet, Text, View, Pressable, ScrollView, Dimensions } from 'react-native'
+import { Text, View, Pressable, ScrollView, Dimensions, ActivityIndicator, Alert, Image } from 'react-native'
 import React, { useState, useEffect, useRef } from 'react'
-import MaterialIcons from '@expo/vector-icons/build/MaterialIcons';
-import Ionicons from '@expo/vector-icons/build/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-
-type RootStackParamList = {
-  Login: undefined;
-  Home: undefined;
-  BookDetail: { bookId: string; title: string };
-};
+import { RootStackParamList } from '../App';
+import { bookService } from '../services/api';
 
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-interface Book {
-  id: string;
-  title: string;
+interface BookContainerProps {
+  search?: string;
+  page?: number;
+  onPageChange?: (page: number) => void;
 }
 
-export default function BookContainer() {
+export interface BookItem {
+  id: number;
+  barkod: string;
+  kod: string;
+  stokcins: string;
+  resfile: string;
+  kfiyat: number;
+  pfiyat1: number;
+  kisk: number;
+  kkdv: number;
+  smiktar: number;
+  uretici: {
+    ureticiad: string;
+  };
+  stk_date_update: string;
+  authors?: Array<{
+    id: number;
+    at_name: string;
+    at_who: number;
+  }>;
+  kategori?: {
+    kategoriad: string;
+  };
+  sayfasayisi?: number;
+  basimyeri?: string;
+  yayin_dili?: {
+    ln_name: string;
+  };
+  ozet?: string;
+  resurl?: string;
+  sm_resurl?: string;
+}
+
+export default function BookContainer({ search = '', page = 1 }: BookContainerProps) {
   const navigation = useNavigation<NavigationProp>();
-  const [hoveredItems, setHoveredItems] = useState<{[key: string]: boolean}>({});
-  const [isPrevPressed, setIsPrevPressed] = useState(false);
-  const [isNextPressed, setIsNextPressed] = useState(false);
-  const [books, setBooks] = useState<Book[]>([]);
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollViewRef = useRef<ScrollView>(null);
-  const BOOK_WIDTH = Dimensions.get('window').width / 2; 
+  const [books, setBooks] = useState<BookItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const mockData: Book[] = [
-      { id: '1', title: 'Book 1' },
-      { id: '2', title: 'Book 2' },
-      { id: '3', title: 'Book 3' },
-      { id: '4', title: 'Book 4' },
-      { id: '5', title: 'Book 5' },
-    ];
-    setBooks(mockData);
-  }, []);
+    loadBooks();
+  }, [search, page]);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      if (currentIndex < books.length - 1) {
-        setCurrentIndex(prev => prev + 1);
-        scrollViewRef.current?.scrollTo({
-          x: BOOK_WIDTH * (currentIndex + 1),
-          animated: true
-        });
-      } else {
-        setCurrentIndex(0);
-        scrollViewRef.current?.scrollTo({
-          x: 0,
-          animated: true
-        });
+  const loadBooks = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const booksResponse = await bookService.getBookList(search, page, 50);
+      const booksData = booksResponse?.KiboApp?.Response?.data?.stok;
+      if (!booksData) {
+        setError('Kitap verileri alınamadı');
+        setBooks([]);
+        return;
       }
-    }, 4000); 
-
-    return () => clearInterval(interval);
-  }, [currentIndex, books.length]);
-
-  const handlePressIn = (id: string) => {
-    setHoveredItems(prev => ({ ...prev, [id]: true }));
-  };
-
-  const handlePressOut = (id: string) => {
-    setHoveredItems(prev => ({ ...prev, [id]: false }));
-  };
-
-  const handlePrevious = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(prev => prev - 1);
-      scrollViewRef.current?.scrollTo({
-        x: BOOK_WIDTH * (currentIndex - 1),
-        animated: true
-      });
+      setBooks(booksData);
+    } catch (error) {
+      setError('Kitaplar yüklenirken bir hata oluştu');
+      setBooks([]);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleNext = () => {
-    if (currentIndex < books.length - 1) {
-      setCurrentIndex(prev => prev + 1);
-      scrollViewRef.current?.scrollTo({
-        x: BOOK_WIDTH * (currentIndex + 1),
-        animated: true
-      });
+  const handleBookPress = (book: BookItem) => {
+    if (!book.barkod) {
+      Alert.alert('Hata', 'Kitap detayları alınamadı');
+      return;
     }
-  };
-
-  const handleBookPress = (book: Book) => {
+    
     navigation.navigate('BookDetail', {
-      bookId: book.id,
-      title: book.title
+      bookId: book.barkod,
+      title: book.stokcins,
+      imageUrl: book.resfile || book.resurl || book.sm_resurl,
+      search: book.barkod
     });
   };
 
-  return (
-    <View style={{ width: '100%' }}>
-      <ScrollView 
-        ref={scrollViewRef}
-        horizontal 
-        showsHorizontalScrollIndicator={false}
-        scrollEnabled={false} 
-        contentContainerStyle={{ paddingHorizontal: 16 }}
-      >
-        {books.map((book) => (
-          <Pressable 
-            key={book.id}
-            onPress={() => handleBookPress(book)}
-            onPressIn={() => handlePressIn(book.id)}
-            onPressOut={() => handlePressOut(book.id)}
-            style={{
-              width: BOOK_WIDTH - 18,
-              marginRight: 16,
-            }}
-            className={`bg-white rounded-lg p-4 ${hoveredItems[book.id] ? 'border-2 border-red-500' : 'border-2 border-transparent'}`}
-          >
-            <Text className='text-lg font-semibold text-gray-500'>{book.title}</Text>
-          </Pressable>
-        ))}
-      </ScrollView>
-      
-      <View className="flex-row justify-center items-center mt-4">
-        <View className="flex-row items-center border border-gray-200 rounded-lg overflow-hidden">
-          <Pressable
-            onPress={handlePrevious}
-            onPressIn={() => setIsPrevPressed(true)}
-            onPressOut={() => setIsPrevPressed(false)}
-            className={`px-6 py-3 ${isPrevPressed ? 'bg-gray-200' : ''}`}
-            disabled={currentIndex === 0}
-          >
-            <Ionicons name="arrow-back" size={24} color={currentIndex === 0 ? "#999" : "black"} />
-          </Pressable>
-          
-          <View className="w-[1px] h-8 bg-gray-200" />
-          
-          <Pressable
-            onPress={handleNext}
-            onPressIn={() => setIsNextPressed(true)}
-            onPressOut={() => setIsNextPressed(false)}
-            className={`px-6 py-3 ${isNextPressed ? 'bg-gray-200' : ''}`}
-            disabled={currentIndex === books.length - 1}
-          >
-            <Ionicons name="arrow-forward" size={24} color={currentIndex === books.length - 1 ? "#999" : "black"} />
-          </Pressable>
-        </View>
+  if (loading) {
+    return (
+      <View className="flex-1 justify-center items-center">
+        <ActivityIndicator size="large" color="#dc2626" />
+        <Text className="mt-2 text-gray-600">Kitaplar yükleniyor...</Text>
       </View>
+    );
+  }
+
+ /* if (error) {
+    return (
+      <View className="flex-1 justify-center items-center p-4">
+        <Text className="text-red-600 mb-4">{error}</Text>
+        <Pressable
+          onPress={loadBooks}
+          className="bg-red-600 px-4 py-2 rounded-lg"
+        >
+          <Text className="text-white">Tekrar Dene</Text>
+        </Pressable>
+      </View>
+    );
+  }*/
+
+  return (
+    <View className="flex-1">
+      <ScrollView 
+        contentContainerStyle={{ 
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          justifyContent: 'space-between',
+          padding: 16,
+          gap: 16
+        }}
+      >
+        {books.map((book) => {
+          const imageUrl = book.resfile && book.resfile.trim() !== '' 
+            ? book.resfile 
+            : book.resurl && book.resurl.trim() !== ''
+            ? book.resurl
+            : book.sm_resurl && book.sm_resurl.trim() !== ''
+            ? book.sm_resurl
+            : '';
+
+          return (
+            <Pressable 
+              key={book.id}
+              onPress={() => handleBookPress(book)}
+              style={{
+                width: (Dimensions.get('window').width - 48) / 2,
+                height: 280,
+              }}
+              className="bg-white rounded-lg overflow-hidden shadow-sm"
+            >
+              <Image 
+                source={{ uri: imageUrl }}
+                style={{ 
+                  width: '100%', 
+                  height: 220,
+                  backgroundColor: '#eee' 
+                }}
+                resizeMode="contain"
+              />
+              <View className="p-2 flex-1 justify-center">
+                <Text 
+                  numberOfLines={3}
+                  className="text-sm font-medium text-gray-800"
+                >
+                  {book.stokcins}
+                </Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </ScrollView>
     </View>
-  )
+  );
 }
 

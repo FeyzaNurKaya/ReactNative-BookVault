@@ -1,0 +1,30 @@
+{
+  "login": "Giriş Yap",
+  "username": "Kullanıcı İsim",
+  "password": "Kullanıcı Şifre",
+  "products": "ÜrünGör",
+  "search": "Ürün Ara..",
+  "logout": "Çıkış Yap",
+  "home": "Ana Sayfa",
+  "languages": {
+    "tr": "Türkçe",
+    "en": "İngilizce",
+    "fr": "Fransızca",
+    "de": "Almanca"
+  },
+  "bookDetail": {
+    "title": "Kitap Detayı",
+    "loading": "Kitap detayları yükleniyor...",
+    "notFound": "Kitap bulunamadı",
+    "goBack": "Geri Dön",
+    "try": "TRY",
+    "kdvIncluded": "Kdv Dahil",
+    "point": "Puan",
+    "listPrice": "Liste",
+    "discount": "İndirim",
+    "stock": "Adet",
+    "invalidBarcode": "Geçersiz barkod",
+    "origin": "Menşei",
+    "priceUpdateDate": "Fiyat Güncelleme Tarihi"
+  }
+} 

@@ -1,20 +1,22 @@
-import { View } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import React, { ReactNode } from 'react'
 import Header from './Header'
 import Footer from './Footer'
 
 interface LayoutProps {
-  children: ReactNode
+  children: ReactNode;
+  search?: string;
 }
 
-const Layout = ({ children }: LayoutProps) => {
+const Layout = ({ children, search }: LayoutProps) => {
   return (
     <View className="flex-1">
-      <Header />
+      <Header search={search} />
       <View className="flex-1">
         {children}
+        <Footer />
       </View>
-      <Footer />
+      {/* ScrollView ile sararsan footer sabit kalmaz. */}
     </View>
   )
 }

@@ -1,0 +1,30 @@
+{
+  "login": "Login",
+  "username": "Username",
+  "password": "Password",
+  "products": "Products",
+  "search": "Search Product..",
+  "logout": "Logout",
+  "home": "Home",
+  "languages": {
+    "tr": "Turkish",
+    "en": "English",
+    "fr": "French",
+    "de": "German"
+  },
+  "bookDetail": {
+    "title": "Book Detail",
+    "loading": "Loading book details...",
+    "notFound": "Book not found",
+    "goBack": "Go Back",
+    "try": "TRY",
+    "kdvIncluded": "VAT Included",
+    "point": "Point",
+    "listPrice": "List Price",
+    "discount": "Discount",
+    "stock": "Stock",
+    "invalidBarcode": "Invalid barcode",
+    "origin": "Origin",
+    "priceUpdateDate": "Price Update Date"
+  }
+} 

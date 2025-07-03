@@ -62,20 +62,4 @@ npx expo run:ios
 npx expo run:android
 ```
 
-## 🤝 Contributing
 
-Contributions, issues, and feature requests are welcome! Feel free to check [issues page](https://github.com/FeyzaNurKaya/ReactNative-BookVault/issues).
-
-## 📝 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 👩‍💻 Author
-
-**Feyza Nur Kaya**
-
-- GitHub: [@FeyzaNurKaya](https://github.com/FeyzaNurKaya)
-
-## 🌟 Show your support
-
-Give a ⭐️ if you like this project!
